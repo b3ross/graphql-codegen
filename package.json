@@ -1,0 +1,16 @@
+{
+  "name": "indigo-code-generator",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "yarn && tsc"
+  },
+  "dependencies": {
+    "@types/node": "^8.0.22",
+    "fs": "^0.0.1-security",
+    "graphql": "^0.10.5",
+    "graphql-tools": "^1.2.0",
+    "typescript": "^2.4.2"
+  }
+}
