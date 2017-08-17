@@ -1,8 +1,15 @@
+// Types and enums from graphql-js
+// Handlebars
+// Directive support
+// Enum translation
+// Unit tests
+
 import * as graphql from 'graphql';
 import * as fs from 'fs';
 import { Location } from 'graphql/language/ast';
+import * as handlebars from 'handlebars';
 
-import { Model, ObjectDef, Directive, Enum, EnumValue, Field, Scalar, Type } from './model';
+import { Model, ObjectDef, Directive, Enum, Field, Scalar, Type } from './model';
 
 class Parser {
   private tree: any;
@@ -25,7 +32,6 @@ class Parser {
 
 class Visitor {
   private model: Model;
-  private lookup: { [key: string]: any };
 
   constructor(model: Model) {
     this.model = model;
@@ -48,6 +54,7 @@ class Visitor {
   EnumTypeDefinition(node: any) {
     const result = new Enum();
     result.name = node.name.value;
+    result.values = node.values.map((value: any) => value.name.value);
     this.model.enums.push(result);
   }
 
@@ -85,20 +92,30 @@ class Visitor {
 }
 
 class TypescriptGenerator {
-  private tree: any;
+  private model: Model;
 
-  constructor(tree: any) {
-    this.tree = tree;
+  constructor(model: Model) {
+    this.model = model;
   }
 
   generateFile(fileName: string) {}
 
-  generateString() {}
+  generate(): string {
+    return handlebars.compile(this.loadFromPath(__dirname + '/generators/template.handlebars'))(this.model);
+  }
+
+  loadFromPath(filePath: string): string {
+    if (fs.existsSync(filePath)) {
+      return fs.readFileSync(filePath, 'utf8');
+    } else {
+      throw new Error(`Template file ${filePath} does not exists!`);
+    }
+  }
 }
 
 const parser = new Parser();
 parser.parse(fs.readFileSync(__dirname + '/../schema.graphql', 'utf8'));
 const generator = new TypescriptGenerator(parser.getOutput());
-
+console.log(generator.generate());
 // Parser: schema string -> intermediate
 // Generator: intermediate -> typescript

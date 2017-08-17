@@ -24,14 +24,9 @@ export class ObjectDef {
   fields?: Field[];
 }
 
-export class EnumValue {
-  name: string;
-  description: string;
-}
-
 export class Enum {
   name: string;
-  values: EnumValue[] = [];
+  values: string[] = [];
 }
 
 export class Type {

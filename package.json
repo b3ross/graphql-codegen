@@ -4,13 +4,16 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "yarn && tsc"
+    "build": "yarn && tsc && yarn build:generators",
+    "build:generators": "cp -r src/generators dist"
   },
   "dependencies": {
+    "@types/handlebars": "^4.0.35",
     "@types/node": "^8.0.22",
     "fs": "^0.0.1-security",
     "graphql": "^0.10.5",
     "graphql-tools": "^1.2.0",
+    "handlebars": "^4.0.10",
     "typescript": "^2.4.2"
   }
 }
