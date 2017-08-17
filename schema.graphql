@@ -1,0 +1,5 @@
+type Account @poop(foo: "string") {
+  contacts: [String]!
+  name: String!
+  ownerId: ID
+}

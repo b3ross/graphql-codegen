@@ -1,11 +1,12 @@
 export class Directive {
   name: string;
+  arguments: { [argument: string]: string | number } = {};
 }
 
 export class Field {
-  directives?: Directive[];
+  directives?: Directive[] = [];
   name: string;
-  type?: string;
+  type?: Type;
   isArray?: boolean;
   isRequired?: boolean;
 }
@@ -16,7 +17,7 @@ export class Scalar {
   value: string;
 }
 
-export class Type {
+export class ObjectDef {
   directives?: Directive[];
   name?: string;
   description?: string;
@@ -33,8 +34,14 @@ export class Enum {
   values: EnumValue[] = [];
 }
 
+export class Type {
+  name: string;
+  isList: boolean;
+  isNonNull: boolean;
+}
+
 export class Model {
-  objects: Type[] = [];
+  objects: ObjectDef[] = [];
   enums: Enum[] = [];
   scalars: Scalar[] = [];
 }

@@ -1,6 +1,8 @@
 import * as graphql from 'graphql';
 import * as fs from 'fs';
-import { Model, Type, Directive, Enum, EnumValue, Field, Scalar } from './model';
+import { Location } from 'graphql/language/ast';
+
+import { Model, ObjectDef, Directive, Enum, EnumValue, Field, Scalar, Type } from './model';
 
 class Parser {
   private tree: any;
@@ -10,13 +12,10 @@ class Parser {
 
   parse(schema: any) {
     const parsed = graphql.parse(schema);
-    console.info(JSON.stringify(parsed));
     this.tree = parsed.definitions;
     this.result = new Model();
-
     graphql.visit(this.tree, new Visitor(this.result));
-    console.info(this.result.scalars.length);
-    console.info(this.result.objects.length);
+    console.log(JSON.stringify(this.result, null, 2));
   }
 
   getOutput(): Model {
@@ -26,12 +25,14 @@ class Parser {
 
 class Visitor {
   private model: Model;
+  private lookup: { [key: string]: any };
+
   constructor(model: Model) {
     this.model = model;
   }
 
-  ObjectTypeDefinition(node: any) {
-    const result = new Type();
+  ObjectTypeDefinition(node: any, key: number, parent: any) {
+    const result = new ObjectDef();
     result.name = node.name.value;
     result.directives = node.directives.map((directive: any) => this.handleDirective(directive));
     result.fields = node.fields.map((field: any) => this.handleField(field));
@@ -50,26 +51,36 @@ class Visitor {
     this.model.enums.push(result);
   }
 
-  private handleDirective(directive: any): Directive {
-    const result = new Directive();
-    result.name = directive.name.value;
-    return result;
-  }
-
-  private handleField(field: any): Field {
+  private handleField(node: any): Field {
     const result = new Field();
-    result.name = field.name.value;
-    result.type = this.handleType(field.type);
+    result.name = node.name.value;
+    result.type = this.handleType(node.type);
     return result;
   }
 
-  private handleType(type: any): string {
-    console.info(type);
-    if (!type) {
-      return undefined;
+  private handleDirective(node: any): Directive {
+    const result = new Directive();
+    result.name = node.name.value;
+    for (const arg of node.arguments) {
+      result.arguments[arg.name.value] = arg.value.value;
     }
-    // TODO
-    return type.name.value;
+    return result;
+  }
+
+  private handleType(node: any, prev: Type = undefined): Type {
+    const result = prev ? prev : new Type();
+    if (node.kind === 'NamedType') {
+      result.name = node.name.value;
+      return result;
+    } else {
+      if (node.kind === 'NonNullType') {
+        result.isNonNull = true;
+        return this.handleType(node.type, result);
+      } else if (node.kind === 'ListType') {
+        result.isList = true;
+        return this.handleType(node.type, result);
+      }
+    }
   }
 }
 
