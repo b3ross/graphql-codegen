@@ -4,7 +4,13 @@
 
 /* tslint:disable */
 {{#each objects}}
+{{#each directives}}
+@{{name}}({{#each arguments}}'{{value}}'{{#unless @last}},{{/unless}}{{/each}})
+{{/each}}
 export interface {{name}} {
+{{#each fields}}
+  {{name}}: {{type.name}};
+{{/each}}
 }
 {{/each}}
 /* tslint:enable */

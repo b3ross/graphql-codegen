@@ -69,7 +69,7 @@ class Visitor {
     const result = new Directive();
     result.name = node.name.value;
     for (const arg of node.arguments) {
-      result.arguments[arg.name.value] = arg.value.value;
+      result.arguments.push({ name: arg.name.value, value: arg.value.value });
     }
     return result;
   }
@@ -101,7 +101,8 @@ class TypescriptGenerator {
   generateFile(fileName: string) {}
 
   generate(): string {
-    return handlebars.compile(this.loadFromPath(__dirname + '/generators/template.handlebars'))(this.model);
+    const compiled: any = handlebars.compile(this.loadFromPath(__dirname + '/generators/template.handlebars'));
+    return compiled(this.model);
   }
 
   loadFromPath(filePath: string): string {

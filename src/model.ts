@@ -1,6 +1,11 @@
 export class Directive {
   name: string;
-  arguments: { [argument: string]: string | number } = {};
+  arguments: DirectiveArgument[] = [];
+}
+
+export class DirectiveArgument {
+  name: string;
+  value: string;
 }
 
 export class Field {

@@ -87,7 +87,7 @@ enum Stage {
 }
 
 # Represents an outstanding or completed business transaction with with an account.
-type Opportunity {
+type Opportunity @poop(arg: "foo") {
   acresIndigoIrrigated: Float
   acresIndigoNonIrrigated: Float
   acresPlantedIndigo: Float
