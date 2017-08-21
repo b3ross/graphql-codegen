@@ -12,7 +12,6 @@ export class Field {
   directives?: Directive[] = [];
   name: string;
   type?: Type;
-  isArray?: boolean;
   isRequired?: boolean;
 }
 
@@ -22,7 +21,7 @@ export class Scalar {
   value: string;
 }
 
-export class ObjectDef {
+export class Class {
   directives?: Directive[];
   name?: string;
   description?: string;
@@ -41,7 +40,15 @@ export class Type {
 }
 
 export class Model {
-  objects: ObjectDef[] = [];
+  classes: Class[] = [];
   enums: Enum[] = [];
   scalars: Scalar[] = [];
+
+  public allNames(): string[] {
+    let names: string[] = this.classes.map(o => o.name);
+    names = names.concat(this.enums.map(e => e.name));
+    names = names.concat(this.scalars.map(s => s.name));
+    console.log(JSON.stringify(names));
+    return names;
+  }
 }

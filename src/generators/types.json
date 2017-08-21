@@ -1,0 +1,9 @@
+{
+  "String": "string",
+  "ID": "string",
+  "Float": "number",
+  "Int": "number",
+  "Boolean": "boolean",
+  "DateTime": "Date",
+  "Date": "Date"
+}

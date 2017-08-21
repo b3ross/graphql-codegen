@@ -3,15 +3,29 @@
  */
 
 /* tslint:disable */
-{{#each objects}}
+{{#each classes}}
 {{#each directives}}
 @{{name}}({{#each arguments}}'{{value}}'{{#unless @last}},{{/unless}}{{/each}})
 {{/each}}
 export interface {{name}} {
 {{#each fields}}
-  {{name}}: {{type.name}};
+  {{#each directives}}
+  @{{name}}({{#each arguments}}'{{value}}'{{#unless @last}},{{/unless}}{{/each}})
+  {{/each}}
+  {{name}}: {{mapType type.name}}{{#if type.isList}}[]{{/if}}{{#unless type.isNonNull}} | null {{/unless}};
 {{/each}}
 }
+
+{{/each}}
+
+{{#each enums}}
+export enum {{name}} {
+  {{#each values}}
+  {{this}}{{#unless @last}},{{/unless}}
+  {{/each}}
+}
+
 {{/each}}
 /* tslint:enable */
+
 
