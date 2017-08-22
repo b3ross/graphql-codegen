@@ -1,6 +1,7 @@
 /**
  * This is a generated file.  Please do not edit.
  */
+import { Enum } from 'typescript-string-enums';
 
 /* tslint:disable */
 {{#each classes}}
@@ -19,11 +20,12 @@ export interface {{name}} {
 {{/each}}
 
 {{#each enums}}
-export enum {{name}} {
+export type {{name}} = Enum<typeof {{name}}>;
+export const {{name}} = Enum(
   {{#each values}}
-  {{this}}{{#unless @last}},{{/unless}}
+  '{{mapEnumeration ../name this}}': '{{this}}'{{#unless @last}},{{/unless}}
   {{/each}}
-}
+);
 
 {{/each}}
 /* tslint:enable */

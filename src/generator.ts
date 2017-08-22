@@ -32,7 +32,7 @@ class Visitor {
   }
 
   ObjectTypeDefinition(node: any, key: number, parent: any) {
-    if (node.name.value === 'Query') {
+    if (node.name.value === 'Query' || node.name.value === 'Mutation') {
       return;
     }
     const result = new Class();
@@ -89,15 +89,20 @@ class Visitor {
   }
 }
 
-type TypeMap = { [key: string]: string };
+type AnyMap = { [key: string]: any };
+type StringMap = { [key: string]: string };
 
 class TypescriptGenerator {
   private model: Model;
-  private typeMapping: TypeMap;
+  private typeMapping: StringMap;
+  private enumerationMapping: AnyMap;
+  private configuration: AnyMap;
 
   constructor(model: Model) {
     this.model = model;
+    this.configuration = this.loadConfiguration();
     this.typeMapping = this.getTypeMapping();
+    this.enumerationMapping = this.getEnumerationMapping();
   }
 
   generate(): string {
@@ -108,26 +113,42 @@ class TypescriptGenerator {
         throw new Error(`Could not find mapping for type ${type}`);
       }
     });
+    handlebars.registerHelper('mapEnumeration', (enumeration: string, value: string) => {
+      if (enumeration in this.enumerationMapping && value in this.enumerationMapping[enumeration]) {
+        return this.enumerationMapping[enumeration][value];
+      } else {
+        return value;
+      }
+    });
     const template = this.loadFile(__dirname + '/generators/template.handlebars');
     const compiled: any = handlebars.compile(template);
     return compiled(this.model);
   }
 
-  loadFile(filePath: string): string {
+  private loadConfiguration(): AnyMap {
+    return JSON.parse(this.loadFile(__dirname + '/generators/config.json'));
+  }
+
+  private getTypeMapping(): StringMap {
+    const typeMap: StringMap = this.configuration['typeMapping'];
+    for (const name of this.model.allNames()) {
+      if (!(name in typeMap)) {
+        typeMap[name] = name;
+      }
+    }
+    return typeMap;
+  }
+
+  private getEnumerationMapping(): AnyMap {
+    return this.configuration['enumerationMapping'];
+  }
+
+  private loadFile(filePath: string): string {
     if (fs.existsSync(filePath)) {
       return fs.readFileSync(filePath, 'utf8');
     } else {
       throw new Error(`File ${filePath} does not exists!`);
     }
-  }
-
-  private getTypeMapping(): TypeMap {
-    const contents: string = this.loadFile(__dirname + '/generators/types.json');
-    const typeMap: TypeMap = JSON.parse(contents);
-    for (const name of this.model.allNames()) {
-      typeMap[name] = name;
-    }
-    return typeMap;
   }
 }
 
