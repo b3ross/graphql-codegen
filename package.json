@@ -1,5 +1,5 @@
 {
-  "name": "indigo-code-generator",
+  "name": "graphql-codegen",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -10,7 +10,6 @@
   "dependencies": {
     "@types/handlebars": "^4.0.35",
     "@types/node": "^8.0.22",
-    "fs": "^0.0.1-security",
     "graphql": "^0.10.5",
     "graphql-tools": "^1.2.0",
     "handlebars": "^4.0.10",
