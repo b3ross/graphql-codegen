@@ -9,23 +9,23 @@ export class DirectiveArgument {
 }
 
 export class Field {
-  directives?: Directive[] = [];
+  directives: Directive[] = [];
   name: string;
-  type?: Type;
-  isRequired?: boolean;
+  type: Type;
+  isRequired: boolean;
 }
 
 export class Scalar {
-  name?: string;
-  description?: string;
+  name: string;
+  description: string;
   value: string;
 }
 
 export class Class {
-  directives?: Directive[];
-  name?: string;
-  description?: string;
-  fields?: Field[];
+  directives: Directive[];
+  name: string;
+  description: string;
+  fields: Field[];
 }
 
 export class Enum {
@@ -48,7 +48,6 @@ export class Model {
     let names: string[] = this.classes.map(o => o.name);
     names = names.concat(this.enums.map(e => e.name));
     names = names.concat(this.scalars.map(s => s.name));
-    console.log(JSON.stringify(names));
     return names;
   }
 }

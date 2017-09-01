@@ -4,15 +4,24 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "yarn && tsc && yarn build:generators",
+    "build": "yarn && tsc && yarn build:generators && yarn tslint",
+    "tslint": "tslint -c tslint.json -p tsconfig.json",
     "build:generators": "cp -r src/generators dist"
   },
   "dependencies": {
+    "@types/argparse": "^1.0.31",
     "@types/handlebars": "^4.0.35",
     "@types/node": "^8.0.22",
+    "@types/winston": "^2.3.5",
+    "argparse": "^1.0.9",
     "graphql": "^0.10.5",
     "graphql-tools": "^1.2.0",
     "handlebars": "^4.0.10",
-    "typescript": "^2.4.2"
+    "typescript": "^2.4.2",
+    "winston": "^2.3.1"
+  },
+  "devDependencies": {
+    "tslint": "^5.7.0",
+    "tslint-react": "^3.2.0"
   }
 }
