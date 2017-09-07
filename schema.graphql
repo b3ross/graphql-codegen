@@ -1,0 +1,139 @@
+scalar Date
+
+scalar DateTime
+
+schema {
+  query: Query
+}
+
+enum SortDirection {
+  ASC
+  DESC
+}
+
+# Root Ceres query type
+type Query {
+  accounts(
+    offset: Int = 0
+    limit: Int = 20
+    sortColumn: String
+    sortDirection: SortDirection
+    nameFilter: String
+  ): [Account]!
+  opportunities(
+    offset: Int = 0
+    limit: Int = 20
+    sortColumn: String
+    sortDirection: SortDirection
+    nameFilter: String
+  ): [Opportunity]!
+  account(id: ID!): Account
+}
+
+enum ContactType {
+  RETAILER
+  GROWER
+  TRUSTED_ADVISOR
+  OTHER
+}
+
+enum APHCalculationType {
+  TREND_ADJUSTED
+  AVERAGE
+}
+
+enum Crop {
+  WHEAT
+  COTTON
+  CORN
+  SOYBEAN
+  RICE
+  DOUBLE_CROP_SOYBEAN
+}
+
+enum PricingModel {
+  AMOUNT_PER_BUSHEL
+  PERCENT_OF_ACRES_FIXED
+  PERCENT_OF_ACRES_VARIABLE
+}
+
+# Represents a family, business entity, or farm with which Indigo does business
+type Account {
+  city: String
+  contacts: [Contact]!
+  county: String
+  country: String
+  id: ID!
+  lastContactDate: Date
+  name: String!
+  ownerId: ID
+  ownerName: String
+  phone: String
+  postalCode: String
+  opportunities: [Opportunity]!
+  state: String
+  street: String
+}
+
+enum Stage {
+  PRESENTATION_ESTIMATE
+  PROPOSAL_PRICE_QUOTE
+  VERBAL_AGREEMENT
+  CONTRACT_PENDING
+  CLOSED_WON
+  CLOSED_LOST
+  QUALIFICATION
+  GROWER_MEETING
+}
+
+# Represents an outstanding or completed business transaction with with an account.
+type Opportunity @poop(arg: "foo") {
+  acresIndigoIrrigated: Float @potato(what: "bar")
+  acresIndigoNonIrrigated: Float
+  acresPlantedIndigo: Float
+  acresTotalIrrigated: Float
+  acresTotalNonIrrigated: Float
+  aphIrrigated: Float
+  aphNonIrrigated: Float
+  aphTypeIrrigated: APHCalculationType
+  aphTypeNonIrrigated: APHCalculationType
+  bushelsPerAcreExpected: Float
+  bushelsPurchasedFinal: Float
+  bushelsPurchasedInitial: Float
+  bushelsTotalFinal: Float
+  bushelsTotalInitial: Float
+  bushelsTradedFinal: Float
+  bushelsTradedInitial: Float
+  closeDate: Date!
+  crop: Crop
+  description: String
+  id: ID!
+  name: String!
+  lastModifiedDate: DateTime
+  liensBeforeIndigo: Float
+  offerApproved: Boolean
+  paymentFinal: Float
+  paymentInitial: Float
+  paymentPerAcreFinal: Float
+  paymentPerAcreInitial: Float
+  paymentTotal: Float
+  plantingRateIrrigated: Float
+  plantingRateNonIrrigated: Float
+  pricePerBushelFinal: Float
+  pricePerBushelInitial: Float
+  pricingModel: PricingModel
+  stageName: Stage!
+  yieldAverageIrrigated: Float
+  yieldAverageNonIrrigated: Float
+  yieldIncreaseExpected: Float
+}
+
+# Represents a person associated with an account.
+type Contact {
+  contactType: ContactType
+  firstName: String
+  lastName: String
+  lastModifiedDate: DateTime
+  phone: String
+  email: String
+}

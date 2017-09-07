@@ -1,0 +1,23 @@
+{
+  "typeMapping": {
+    "String": "string",
+    "ID": "string",
+    "Float": "number",
+    "Int": "number",
+    "Boolean": "boolean",
+    "DateTime": "Date",
+    "Date": "Date"
+  },
+  "enumerationMapping": {
+    "Stage": {
+      "PRESENTATION_ESTIMATE": "Presentation/Estimate",
+      "PROPOSAL_PRICE_QUOTE": "Proposal/Price Quote",
+      "VERBAL_AGREEMENT": "Verbal Agreement",
+      "CONTRACT_PENDING": "Contract Pending",
+      "CLOSED_WON": "Closed Won",
+      "CLOSED_LOST": "Closed Lost",
+      "QUALIFICATION": "Qualification",
+      "GROWER_MEETING": "Grower Meeting"
+    }
+  }
+}
